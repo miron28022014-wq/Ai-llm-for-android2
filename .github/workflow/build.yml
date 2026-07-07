@@ -2,9 +2,9 @@ name: Build APK
 
 on:
   push:
-    branches: [ "основной" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "основной" ]
+    branches: [ "main" ]
 
 jobs:
   build:
