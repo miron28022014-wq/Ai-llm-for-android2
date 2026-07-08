@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LocalAI</string>
+    <string name="settings">Настройки</string>
+    <string name="model_setup">Установка модели</string>
+    <string name="send">Отправить</string>
+    <string name="stop">Стоп</string>
+    <string name="clear_chat">Очистить чат</string>
+    <string name="load_model">Загрузить модель</string>
+    <string name="model_info">Информация о модели</string>
+</resources>
