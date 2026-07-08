@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_primary">#111318</color>
+    <color name="bg_surface">#1C1F26</color>
+    <color name="bg_bubble_user">#2D5BE3</color>
+    <color name="bg_bubble_assistant">#262B35</color>
+    <color name="bg_avatar">#1E3A8A</color>
+
+    <!-- Текст -->
+    <color name="text_primary">#E8EAED</color>
+    <color name="text_secondary">#9AA0AC</color>
+    <color name="text_hint">#5F6571</color>
+    <color name="bubble_user_text">#FFFFFF</color>
+
+    <!-- Акцент (фиолетово-синий) -->
+    <color name="accent">#7C8EFF</color>
+    <color name="accent_dark">#5568E0</color>
+
+    <!-- Состояния -->
+    <color name="error">#E05555</color>
+    <color name="success">#4CAF50</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
