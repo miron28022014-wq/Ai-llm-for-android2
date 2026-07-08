@@ -1,14 +1,88 @@
-# Ai-llm-for-android2 - generated app module
+# LocalAI Assistant — Android-приложение с локальной нейросетью
 
-This commit added a minimal Android app module that integrates existing layout resources into a buildable project.
+## Что это?
+Android-приложение, которое запускает LLM **полностью на устройстве**: без интернета, без облака, без слежки. Работ[...]
 
-How to build locally
-1. Install Java 11 and Android SDK (Android Studio recommended).
-2. From repo root:
-   - gradle wrapper --gradle-version 8.4
-   - ./gradlew :app:assembleDebug
-3. APK will be in app/build/outputs/apk/debug/app-debug.apk
+## Архитектура
 
-Notes
-- The Activities included are placeholders to allow compilation. Replace with your actual logic if needed.
-- If the build fails in CI, check the Actions logs and share errors here; I will help fix them.
+```
+app/
+├── model/
+│   ├── ChatMessage.kt         # Дата-класс сообщения
+│   └── LlmRepository.kt      # Ядро: MediaPipe LLM Inference
+├── ui/
+│   ├── ChatViewModel.kt       # StateHolder: стриминг, история
+│   ├── ChatAdapter.kt         # RecyclerView с Markdown
+│   ├── MainActivity.kt        # Главный экран чата
+│   ├── SettingsActivity.kt    # Настройки (промпт, температура)
+│   └── ModelSetupActivity.kt  # Гайд по установке модели
+└── utils/
+    └── PreferencesManager.kt  # SharedPreferences-обёртка
+```
+
+## Рекомендуемые модели
+
+| Модель | Размер | RAM | Скорость | Качество |
+|--------|--------|-----|----------|----------|
+| **Gemma 2B IT (GPU INT4)** ⭐ | 1.5 ГБ | 4 ГБ | Быстро | Хорошее |
+| Gemma 7B IT (GPU INT4) | 3.8 ГБ | 8 ГБ | Средне | Отличное |
+| Phi-2 (GPU INT4) | 2.8 ГБ | 6 ГБ | Средне | Хорошее |
+
+Скачивать здесь: https://huggingface.co/google/gemma-2b-it-gpu-int4
+
+## Быстрый старт
+
+### 1. Открыть в Android Studio
+```bash
+# Клонируй/разархивируй проект
+# Открой папку android-llm-app в Android Studio Hedgehog или новее
+```
+
+### 2. Скачать модель
+1. Зарегистрируйся на HuggingFace и прими лицензию Gemma
+2. Скачай `gemma-2b-it-gpu-int4.bin` (~1.5 ГБ)
+3. Перенеси на телефон
+
+### 3. Сборка и запуск
+```bash
+./gradlew assembleDebug
+# Или Run ▶ в Android Studio
+```
+
+### 4. Установить модель
+В приложении: **⋮ → Загрузить модель → Выбрать файл .bin**
+
+---
+
+## Технологии
+
+- **MediaPipe Tasks GenAI** — локальный инференс на GPU
+- **Kotlin Coroutines + Flow** — стриминг токенов
+- **Markwon** — рендеринг Markdown в ответах
+- **Material Design 3** — тёмный интерфейс
+- **MVVM** — LiveData + ViewModel
+
+## Требования к телефону
+
+- Android 8.0+ (API 26)
+- 4+ ГБ RAM (лучше 6+)
+- 2–8 ГБ свободного места
+- ARM64 процессор (Qualcomm, MediaTek, Apple-совместимый)
+
+## Возможности приложения
+
+- ✅ Стриминг ответов (токены появляются по мере генерации)
+- ✅ Кнопка «Стоп» для остановки генерации
+- ✅ Кастомный системный промпт
+- ✅ Настройка температуры и длины ответа
+- ✅ Рендеринг Markdown (код, списки, жирный текст)
+- ✅ Очистка истории + новая сессия
+- ✅ Работает полностью офлайн
+
+## Что можно добавить позже
+
+- [ ] RAG (загрузка документов в контекст)
+- [ ] Голосовой ввод (STT) + TTS
+- [ ] История чатов с сохранением в Room
+- [ ] Несколько персонажей/промптов
+- [ ] Поддержка GGUF через llama.cpp (для более мощных моделей)
