@@ -19,20 +19,28 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Set up Android SDK
-      uses: android-actions/setup-android@v2
-
-    - name: Install Android SDK components
+    - name: Install Android command-line tools and SDK components
       env:
-        ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+        ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
+        PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/platform-tools:${{ env.PATH }}
       run: |
-        yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
-        sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+        set -e
+        mkdir -p "$ANDROID_SDK_ROOT"
+        cd /tmp
+        echo "Downloading Android command-line tools..."
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline.zip
+        unzip -q cmdline.zip
+        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+        mv cmdline-tools/* "$ANDROID_SDK_ROOT/cmdline-tools/latest/"
+        export ANDROID_SDK_ROOT="$ANDROID_SDK_ROOT"
+        export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+        yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
+        sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-    - name: Install Gradle (for wrapper generation)
+    - name: Install Gradle
       run: |
         sudo apt-get update
-        sudo apt-get install -y gradle
+        sudo apt-get install -y gradle unzip
 
     - name: Generate Gradle wrapper
       working-directory: wrapper-app
@@ -40,6 +48,9 @@ jobs:
 
     - name: Build debug APK
       working-directory: wrapper-app
+      env:
+        ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
+        PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/platform-tools:${{ env.PATH }}
       run: ./gradlew assembleDebug --no-daemon
 
     - name: Upload artifact
