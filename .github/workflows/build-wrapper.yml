@@ -22,7 +22,6 @@ jobs:
     - name: Install Android command-line tools and SDK components
       env:
         ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
-        PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/platform-tools:${{ env.PATH }}
       run: |
         set -e
         mkdir -p "$ANDROID_SDK_ROOT"
@@ -50,8 +49,9 @@ jobs:
       working-directory: wrapper-app
       env:
         ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
-        PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/platform-tools:${{ env.PATH }}
-      run: ./gradlew assembleDebug --no-daemon
+      run: |
+        export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+        ./gradlew assembleDebug --no-daemon
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
