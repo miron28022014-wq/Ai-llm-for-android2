@@ -36,22 +36,26 @@ jobs:
         yes | sdkmanager --sdk_root="$ANDROID_SDK_ROOT" --licenses
         sdkmanager --sdk_root="$ANDROID_SDK_ROOT" "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-    - name: Install Gradle
+    - name: Install system packages
       run: |
         sudo apt-get update
-        sudo apt-get install -y gradle unzip
+        sudo apt-get install -y unzip wget
 
-    - name: Generate Gradle wrapper
-      working-directory: app
-      run: gradle wrapper --gradle-version 8.4
+    - name: Install Gradle 8.4
+      run: |
+        cd /tmp
+        wget -q https://services.gradle.org/distributions/gradle-8.4-bin.zip -O gradle.zip
+        unzip -q gradle.zip -d /tmp
+        echo "GRADLE_HOME=/tmp/gradle-8.4" >> $GITHUB_ENV
+        echo "/tmp/gradle-8.4/bin" >> $GITHUB_PATH
 
     - name: Build debug APK
       working-directory: app
       env:
         ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
       run: |
-        export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
-        ./gradlew assembleDebug --no-daemon
+        export PATH="/tmp/gradle-8.4/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+        gradle assembleDebug --no-daemon
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
