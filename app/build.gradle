@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'com.miron.aiassistant'
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.miron.aiassistant"
@@ -20,4 +21,5 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'com.google.android.material:material:1.9.0'
 }
