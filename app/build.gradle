@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.miron.aiassistant'
+    namespace 'com.localai.assistant'
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.miron.aiassistant"
+        applicationId "com.localai.assistant"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
